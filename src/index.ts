@@ -20,7 +20,7 @@ function removeAtRule(atRule: AtRule, opt: boolean) {
 
 const plugin: PluginCreator<PluginOptions> = (opts?: PluginOptions) => {
   const defaults: PluginOptions = {
-    strictMode: false,
+    strictMode: true,
     keepProps: false,
     keepDumps: false,
   };

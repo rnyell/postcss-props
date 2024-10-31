@@ -1,7 +1,7 @@
 {
   "name": "postcss-props",
   "version": "0.0.15",
-  "description": "A PostCSS plugin for defining custom and reusable style declarations",
+  "description": "A PostCSS plugin that enables creating and reusing custom CSS declarations",
   "keywords": [
     "postcss",
     "postcss-plugin"

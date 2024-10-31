@@ -1,12 +1,37 @@
 # postcss-props
 
-**postcss-props** allows you to extend the capability of building custom and reusable declarations alongside of native custom properties.
+**postcss-props** allows you to create and reuse custom CSS declarations, similar to CSS custom properties but for entire declaration blocks.
 
-The plugin has two main entities to use: `@props` and `@dump()`.
+The plugin has two main entities: `@props` and `@dump()`; `@props` is an at-rule to define an identifier with a declaration block (property-value pairs) which can be accessed by `@dump` to insert (_dump_) your styles into a selector.
 
-`@props` is an at-rule that you can define an identifier with a declaration block (property-value pairs) which can be accessed by `@dump` to _dump_ your styles into a selector. The combination of these two do a similar job with CSS variables in which you can declare a property prefixed by `--` and then use `var()` to refer the value it contains; however by postcss-props you can define the whole declarations instead of a single property-value. So probably we can refer this plugin as "Custom Declarations"!
 
-### Suntax:
+## Installation
+
+```sh
+npm install postcss-props --save-dev
+```
+
+
+## Configuration
+
+```js
+// postcss.config.js
+import postcssProps from "postcss-props"
+
+export default {
+  plugins: [
+    postcssProps({
+      /* configs */
+      strictMode: false,
+    })
+  ]
+}
+```
+
+Check [options](#options) for more.
+
+
+## Suntax
 
 ```css
 /* define declarations */
@@ -16,57 +41,77 @@ The plugin has two main entities to use: `@props` and `@dump()`.
 
 div {
   /* insert your declarations */
-  @dump (identifier);
+  @dump(identifier);
   /* other styles */
 }
 ```
 
-### Example
+
+## Example
 
 ```css
-@props buttons {
+@props btn {
   padding: 0.5rem 0.75rem;
   width: 12rem;
   font-size: 90%;
   font-weight: 600;
-  background-color: var(--primary);
   border-radius: 0.5rem;
 }
 
-.btn {
-  @dump (buttons);
+button {
+  @dump(btn);
   display: inline-flex;
   gap: 5px;
 }
 ```
 
-The output looks like this:
+Output:
 
 ```css
-.btn {
+button {
   padding: 0.5rem 0.75rem;
   width: 12rem;
   font-size: 90%;
   font-weight: 600;
-  background-color: var(--primary);
   border-radius: 0.5rem;
   display: inline-flex;
   gap: 5px;
 }
 ```
 
-`@props` is removed for final output, however you can change this bahavior in config and choose to include it in the output file.
-
-## Notes
-
-[postcss-apply](https://www.npmjs.com/package/postcss-apply)
-[postcss-mixins](https://www.npmjs.com/package/postcss-mixins)
-[postcss-define-property](https://www.npmjs.com/package/postcss-define-property)
+By default, `@props` & `@dump` are removed from the final output, however you can change this bahavior in config and choose to include them in the output.
 
 
-- The identifier is a UTF-8 string.
+### options
 
-- Defining props with same names is not an error (however you'll receive a warning) but the latest props will override the entire pre-defined props.
+##### `strictMode`
+
+type: `Boolean`
+
+default: `true`
+
+When enabled, it disallows generating the output file and syntax errors are thrown. By setting this option to `false` you'll get some warnings and also the output is generated.
+
+
+##### `keepProps`
+
+type: `Boolean`
+
+default: `false`
+
+
+##### `keepDumps`
+
+type: `Boolean`
+
+default: `false`
+
+To control whether `@props` or `@dump` should be kept in the output or not. By eefault they are removed.
+
+
+## Limitations
+
+1) Duplicated @props definitions will override previous ones with the same name. In the future versions they will be merged.
 
 ```css
 @props a {
@@ -82,7 +127,7 @@ div {
 }
 ```
 
-- Currently you can't nest other rules (including other `@props`) inside `@props`.
+2) Currently you can't nest other rules and at-rules (including `@props`) inside `@props`.
 
 ```css
 @props btn {
@@ -101,52 +146,26 @@ div {
 }
 ```
 
-## TODOS
 
-It would be fun if props could extend each others.
+## Note
 
-```css
-@props btn {
-  font: inherit;
-  color: inherit;
-  background-color: unset;
-}
+Before choosing this plugin, you might want to consider these alternatives:
 
-@props primary-btn extends btn {
-  padding: 0.5rem 0.75rem;
-  height: var(--h-12);
-  font-size: 0.875rem;
-  backgound-color: var(--primary);
-}
-```
+- [postcss-mixins](https://www.npmjs.com/package/postcss-mixins) - SASS-like mixins
+- [postcss-apply](https://www.npmjs.com/package/postcss-apply) - Similar functionality using `@apply`
+- [postcss-define-property](https://www.npmjs.com/package/postcss-define-property) - Custom property definitions
 
----
 
-Since we have `var(--p)`, the dump can be similar in syntax for consistency, not being an at-rule: `dump(--f)`.
+## Roadmap
 
-```css
-/*
---------------------------------------------
-🟣 alternative syntax:
-using {@var | @let | @decl} instead of @props
+- [x] Throw error when using not defined identifier
+- [x] Warning for props with empty declaration
+- [ ] Merge props with smae names
+- [ ] Props inheritance (`@props primaryBtn extends btn`)
+- [ ] Media queries support within `@props`
+- [ ] Nested rules support
 
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-🟣 alternative syntax:
---flexDisplay {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
 
-\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-🟣 alternative, SASS-like syntax:
-@mixin flexDisplay {
-  //...
-}
+## Contributing
 
-.container {
-  @dump flexDisplay;
-}
---------------------------------------------
-*/
-```
+Contributions are welcome! Please feel free to submit a Pull Request.

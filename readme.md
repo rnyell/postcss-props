@@ -4,32 +4,29 @@
 
 The plugin has two main entities: `@props` and `@dump()`; `@props` is an at-rule to define an identifier with a declaration block (property-value pairs) which can be accessed by `@dump` to insert (_dump_) your styles into a selector.
 
-
 ## Installation
 
 ```sh
 npm install postcss-props --save-dev
 ```
 
-
 ## Configuration
 
 ```js
 // postcss.config.js
-import postcssProps from "postcss-props"
+import postcssProps from "postcss-props";
 
 export default {
   plugins: [
     postcssProps({
       /* configs */
       strictMode: false,
-    })
-  ]
-}
+    }),
+  ],
+};
 ```
 
 Check [options](#options) for more.
-
 
 ## Suntax
 
@@ -41,11 +38,10 @@ Check [options](#options) for more.
 
 div {
   /* insert your declarations */
-  @dump(identifier);
+  @dump (identifier);
   /* other styles */
 }
 ```
-
 
 ## Example
 
@@ -59,7 +55,7 @@ div {
 }
 
 button {
-  @dump(btn);
+  @dump (btn);
   display: inline-flex;
   gap: 5px;
 }
@@ -81,26 +77,36 @@ button {
 
 By default, `@props` & `@dump` are removed from the final output, however you can change this bahavior in config and choose to include them in the output.
 
+Note that you can't nest rules (selectors with declaration block) inside props:
 
-### options
+```css
+@props base {
+  margin: 0;
 
-##### `strictMode`
+  /* this throws an error */
+  main {
+    /*...*/
+  }
+}
+```
+
+## options
+
+#### `strictMode`
 
 type: `Boolean`
 
 default: `true`
 
-When enabled, it disallows generating the output file and syntax errors are thrown. By setting this option to `false` you'll get some warnings and also the output is generated.
+When enabled, it prevents generating the output file and syntax errors are thrown. By setting this option to `false` you'll get the output with some warnings instead.
 
-
-##### `keepProps`
+#### `keepProps`
 
 type: `Boolean`
 
 default: `false`
 
-
-##### `keepDumps`
+#### `keepDumps`
 
 type: `Boolean`
 
@@ -108,10 +114,9 @@ default: `false`
 
 To control whether `@props` or `@dump` should be kept in the output or not. By eefault they are removed.
 
-
 ## Limitations
 
-1) Duplicated @props definitions will override previous ones with the same name. In the future versions they will be merged.
+1. Duplicated @props definitions will override previous ones with the same name. In the future versions they will be merged.
 
 ```css
 @props a {
@@ -127,25 +132,20 @@ div {
 }
 ```
 
-2) Currently you can't nest other rules and at-rules (including `@props`) inside `@props`.
+2. Currently you can't nest at-rules and pseudo selectors inside `@props`.
 
 ```css
+/* focus & @media will be ignored */
 @props btn {
-  padding: 0.5rem;
-  text-align: center;
-
-  /* focus will be ignored */
   &:focus {
     outline: 1px solid;
   }
 
-  /* at-rules */
   @media (width < 480px) {
     padding: 0.25rem;
   }
 }
 ```
-
 
 ## Note
 
@@ -155,7 +155,6 @@ Before choosing this plugin, you might want to consider these alternatives:
 - [postcss-apply](https://www.npmjs.com/package/postcss-apply) - Similar functionality using `@apply`
 - [postcss-define-property](https://www.npmjs.com/package/postcss-define-property) - Custom property definitions
 
-
 ## Roadmap
 
 - [x] Throw error when using not defined identifier
@@ -163,8 +162,6 @@ Before choosing this plugin, you might want to consider these alternatives:
 - [ ] Merge props with smae names
 - [ ] Props inheritance (`@props primaryBtn extends btn`)
 - [ ] Media queries support within `@props`
-- [ ] Nested rules support
-
 
 ## Contributing
 

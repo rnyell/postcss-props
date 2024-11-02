@@ -1,3 +1,5 @@
+import type { AtRule } from "postcss";
+
 export function getParams(text: string) {
   const regex = /\((.*?)\)/;
   const match = text.match(regex);
@@ -6,5 +8,11 @@ export function getParams(text: string) {
     return match[1];
   } else {
     return null;
+  }
+}
+
+export function removeAtRule(atRule: AtRule, keep: boolean) {
+  if (!keep) {
+    atRule.remove();
   }
 }

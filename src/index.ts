@@ -1,5 +1,4 @@
 import type { PluginCreator, Root, AtRule } from "postcss";
-// import { Warning } from "postcss";
 import Issue from "./issue.js";
 import { getParams, removeAtRule } from "./utils.js";
 
@@ -15,7 +14,7 @@ export interface PluginOptions {
 
 const plugin: PluginCreator<PluginOptions> = (opts?: PluginOptions) => {
   const defaults: PluginOptions = {
-    strictMode: true,
+    strictMode: false,
     keepProps: false,
     keepDumps: false,
   };
@@ -51,8 +50,14 @@ const plugin: PluginCreator<PluginOptions> = (opts?: PluginOptions) => {
             declarations[node.prop] = node.value;
           } else if (node.type === "atrule") {
             if (node.name === "props") {
-              //..
+              issue.handler("warn", "nested props");
+              return;
             }
+
+            if (node.name === "media") {
+
+            }
+
           } else if (node.type === "rule") {
             issue.handler("error", "nested rules");
           }
@@ -70,12 +75,6 @@ const plugin: PluginCreator<PluginOptions> = (opts?: PluginOptions) => {
           issue.handler("warn", "argless dump");
           removeAtRule(atRule, keepDumps);
           return;
-          // if (strictMode) {
-          //   // throw atRule.error(ERROR_MESSAGES.warn("argless dump"));
-          // } else {
-          //   // atRule.warn(result, ERROR_MESSAGES.warn("argless dump"));
-          //   return;
-          // }
         }
 
         const declarations = props.get(identifier);
@@ -84,11 +83,6 @@ const plugin: PluginCreator<PluginOptions> = (opts?: PluginOptions) => {
           issue.handler("warn", "undefined identifier", identifier);
           removeAtRule(atRule, keepDumps);
           return;
-          // if (strictMode) {
-          //   // throw atRule.error(ERROR_MESSAGES.error("undefined identifier"));
-          // } else {
-          //   // atRule.warn(result, ERROR_MESSAGES.error("undefined identifier"));
-          // }
         }
 
         for (const prop in declarations) {

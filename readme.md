@@ -4,6 +4,7 @@
 
 The plugin has two main entities: `@props` and `@dump()`; `@props` is an at-rule to define an identifier with a declaration block (property-value pairs) which can be accessed by `@dump` to insert (_dump_) your styles into a selector.
 
+
 ## Installation
 
 ```sh
@@ -18,15 +19,11 @@ import postcssProps from "postcss-props";
 
 export default {
   plugins: [
-    postcssProps({
-      /* configs */
-      strictMode: false,
-    }),
+    postcssProps({/* options */}),
   ],
 };
 ```
 
-Check [options](#options) for more.
 
 ## Suntax
 
@@ -96,9 +93,15 @@ Note that you can't nest rules (selectors with declaration block) inside props:
 
 type: `Boolean`
 
-default: `true`
+default: `false`
 
-When enabled, it prevents generating the output file and syntax errors are thrown. By setting this option to `false` you'll get the output with some warnings instead.
+When enabled, it prevents generating the output file, and errors are thrown.
+
+Issues that do not throw errors but instead produce warnings:
+  - declaraing empty props without declarations
+  - using not defined identifiers in `@dump`
+  - using `@dump` without argument
+
 
 #### `keepProps`
 
@@ -112,7 +115,7 @@ type: `Boolean`
 
 default: `false`
 
-To control whether `@props` or `@dump` should be kept in the output or not. By eefault they are removed.
+To control whether `@props` or `@dump` should be kept in the output or not. By default they are removed.
 
 ## Limitations
 

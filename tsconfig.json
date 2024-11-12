@@ -9,16 +9,14 @@
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
     "lib": ["es2022", "dom", "dom.iterable"],
-
     "strict": true,
     "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-
     "module": "NodeNext",
-
     "rootDir": "src",
     "outDir": "dist",
     "sourceMap": true
-  }
+  },
+  "include": ["src"]
 }

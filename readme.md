@@ -87,6 +87,7 @@ Note that you can't nest rules (selectors with declaration block) inside props:
 }
 ```
 
+
 ## options
 
 #### `strictMode`
@@ -116,6 +117,7 @@ type: `Boolean`
 default: `false`
 
 To control whether `@props` or `@dump` should be kept in the output or not. By default they are removed.
+
 
 ## Limitations
 
@@ -150,6 +152,7 @@ div {
 }
 ```
 
+
 ## Note
 
 Before choosing this plugin, you might want to consider these alternatives:
@@ -158,13 +161,13 @@ Before choosing this plugin, you might want to consider these alternatives:
 - [postcss-apply](https://www.npmjs.com/package/postcss-apply) - Similar functionality using `@apply`
 - [postcss-define-property](https://www.npmjs.com/package/postcss-define-property) - Custom property definitions
 
+
 ## Roadmap
 
-- [x] Throw error when using not defined identifier
-- [x] Warning for props with empty declaration
-- [ ] Merge props with smae names
-- [ ] Props inheritance (`@props primaryBtn extends btn`)
-- [ ] Media queries support within `@props`
+- [ ] Merge props with same names
+- [ ] Props inheritance (e.g. `@props primaryBtn extends btn`)
+- [ ] Support nested rules within `@props`
+
 
 ## Contributing
 
